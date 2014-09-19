@@ -1,0 +1,16 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '8.0'
+
+xcodeproj 'Yelp.xcodeproj'
+
+target "Yelp" do
+
+    pod 'AFNetworking', '~> 2.0'
+    pod 'BDBOAuth1Manager', :head
+    pod 'SVProgressHUD', :head
+
+end
+
+target "YelpTests" do
+
+end
