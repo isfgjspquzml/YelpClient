@@ -54,7 +54,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func doSearch() {
         client.search({(operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-            var errorValue: NSError? = nil
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
             self.searchDict = dictionary["businesses"] as NSArray!
             self.offSet += self.searchDict!.count
@@ -122,10 +121,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 90
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
         configureCell(cell, forRowAtIndexPath: indexPath)
@@ -143,8 +138,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         prototypeCell!.layoutIfNeeded()
         var size = prototypeCell!.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
         
+        println(size.height)
+        
         return size.height
-//        return 100
     }
     
     func configureCell(cell: SearchResultCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -154,8 +150,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int) + " Reviews"
         
         var location = businessDict["location"] as NSDictionary!
-        var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
-        var address = location["address"]![0]! as String
+        var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String);
+        println("158")
+        var address: NSString = "Unknown"
+        
+        if location["address"]!.count > 0 {
+            address = location["address"]![0] as NSString
+        }
         cell.locationLabel.text = address + ", " + area
         
         let thumbnailURL = NSURL.URLWithString(businessDict["image_url"] as String)
@@ -182,7 +183,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         if businessDict["distance"] != nil {
             let metersInAMile = 1609.34
             let distanceInMeters = businessDict["distance"]!.doubleValue
-            cell.distanceLabel.text = NSString(format: "%0.1f", distanceInMeters/metersInAMile)
+            cell.distanceLabel.text = NSString(format: "%0.1f", distanceInMeters/metersInAMile) + " mi"
         } else {
             cell.distanceLabel.text = ""
         }
@@ -190,7 +191,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         let catagories = businessDict["categories"] as NSArray?
         var allTags: String = ""
         if catagories?.count > 0 {
-            allTags += (catagories![0] as NSArray)[0] as String
+            allTags += (catagories![0] as NSArray)[0] as NSString
             if catagories!.count > 1 {
                 for i in 1...(catagories!.count - 1) {
                     allTags += ", "
