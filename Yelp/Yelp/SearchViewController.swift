@@ -17,6 +17,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     var client: YelpClient!
     var searchDict: NSArray?
+    var offSet: Int = 0
+    
     lazy var fileNotFound = UIImage(named: "filenotfound.png")
     
     // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
@@ -53,6 +55,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             var errorValue: NSError? = nil
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
             self.searchDict = dictionary["businesses"] as NSArray!
+            self.offSet += self.searchDict!.count
             self.searchResultTableView.reloadData()
             }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
@@ -60,7 +63,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        println(locations)
+        var latValue = locationManager.location.coordinate.latitude
+        var lonValue = locationManager.location.coordinate.longitude
+//        client.updateLocation(<#location: String#>)
     }
     
     // From https://gist.github.com/itismadhan/6e15b0edf96bb52882c7 - modified
@@ -131,10 +136,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
         
-        
         return cell
     }
-    
-    
 }
 

@@ -54,6 +54,14 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     func updateDealsFilter(deals_filter: Bool) {
         parameters.updateValue(deals_filter, forKey: "deals_filter")
     }
+    
+    func updateOffset(offset: Int) {
+        parameters.updateValue(offset, forKey: "offset")
+    }
+    
+    func updateCll(cll: String) {
+        parameters.updateValue(cll, forKey: "cll")
+    }
 }
 
 
