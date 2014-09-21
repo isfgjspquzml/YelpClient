@@ -9,8 +9,6 @@
 import UIKit
 
 class YelpClient: BDBOAuth1RequestOperationManager {
-//    let locationManager = CLLocationManager()
-    
     var accessToken: String!
     var accessSecret: String!
     var parameters = Dictionary<String, AnyObject>()
@@ -38,9 +36,6 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     }
     
     func updateLocation(location: String) {
-        if(location == "current_location") {
-            
-        }
         parameters.updateValue(location, forKey: "location")
     }
     

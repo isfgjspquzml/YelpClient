@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
-class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet var searchResultTableView: UITableView!
+
+    let locationManager = CLLocationManager()
     
     var client: YelpClient!
     var searchDict: NSArray?
@@ -32,10 +35,20 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+        
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         client.updateTerm("Thai")
         client.updateLocation("San Francisco")
+        
+        doSearch()
+    }
+    
+    func doSearch() {
         client.search({(operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             var errorValue: NSError? = nil
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
@@ -44,6 +57,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
         })
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println(locations)
     }
     
     // From https://gist.github.com/itismadhan/6e15b0edf96bb52882c7 - modified
@@ -88,7 +105,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
         let businessDict = self.searchDict![indexPath.row] as NSDictionary
-        println(businessDict)
         
         cell.numberLabel.text = String(indexPath.row) + "."
         cell.nameLabel.text = businessDict["name"] as String!
