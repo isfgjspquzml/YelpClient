@@ -158,13 +158,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         var imageData :NSData = NSData.dataWithContentsOfURL(averageReviewURL,options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)
         cell.averageReviewImageView.image = UIImage(data: imageData)
     
-//        if businessDict["distance"] != nil {
-//            let metersInAMile = 1609.34
-//            let distanceInMeters = businessDict["distance"]!.doubleValue
-//            cell.distanceLabel.text = NSString(format: "%0.1f", distanceInMeters/metersInAMile)
-//        } else {
-//            cell.distanceLabel.text = "N/A"
-//        }
+        if businessDict["distance"] != nil {
+            let metersInAMile = 1609.34
+            let distanceInMeters = businessDict["distance"]!.doubleValue
+            cell.distanceLabel.text = NSString(format: "%0.1f", distanceInMeters/metersInAMile)
+        } else {
+            cell.distanceLabel.text = ""
+        }
         
         let catagories = businessDict["categories"] as NSArray?
         var allTags: String = ""
@@ -180,6 +180,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         cell.tagsLabel.text = allTags
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        cell.layoutIfNeeded()
+        
+        let size = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
     }
 }
 
