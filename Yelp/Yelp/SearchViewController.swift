@@ -17,6 +17,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     let locationManager = CLLocationManager()
     
     var client: YelpClient!
+    var prototypeCell: SearchResultCell?
     var searchDict: NSArray?
     var offSet: Int = 0
     
@@ -127,11 +128,31 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
+        configureCell(cell, forRowAtIndexPath: indexPath)
+        
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (prototypeCell == nil) {
+            prototypeCell = (searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell)
+        }
+        
+        configureCell(prototypeCell!, forRowAtIndexPath: indexPath)
+        prototypeCell!.layoutIfNeeded()
+        var size = prototypeCell!.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        
+        return size.height
+//        return 100
+    }
+    
+    func configureCell(cell: SearchResultCell, forRowAtIndexPath indexPath: NSIndexPath) {
         let businessDict = self.searchDict![indexPath.row] as NSDictionary
         
         cell.nameLabel.text = String(indexPath.row + 1) + ". " + (businessDict["name"] as String!)
         cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int) + " Reviews"
-
+        
         var location = businessDict["location"] as NSDictionary!
         var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
         var address = location["address"]![0]! as String
@@ -157,7 +178,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         var err: NSError?
         var imageData :NSData = NSData.dataWithContentsOfURL(averageReviewURL,options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)
         cell.averageReviewImageView.image = UIImage(data: imageData)
-    
+        
         if businessDict["distance"] != nil {
             let metersInAMile = 1609.34
             let distanceInMeters = businessDict["distance"]!.doubleValue
@@ -178,14 +199,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         cell.tagsLabel.text = allTags
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        cell.layoutIfNeeded()
-        
-        let size = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
     }
 }
 
