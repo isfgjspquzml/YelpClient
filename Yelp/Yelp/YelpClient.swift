@@ -9,8 +9,11 @@
 import UIKit
 
 class YelpClient: BDBOAuth1RequestOperationManager {
+//    let locationManager = CLLocationManager()
+    
     var accessToken: String!
     var accessSecret: String!
+    var parameters = Dictionary<String, AnyObject>()
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -26,10 +29,35 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         self.requestSerializer.saveAccessToken(token)
     }
     
-    func searchWithTerm(term: String, success: (AFHTTPRequestOperation!, AnyObject!) -> Void, failure: (AFHTTPRequestOperation!, NSError!) -> Void) -> AFHTTPRequestOperation! {
-        // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
-        var parameters = ["term": term, "location": "San Francisco"]
+    func search(success: (AFHTTPRequestOperation!, AnyObject!) -> Void, failure: (AFHTTPRequestOperation!, NSError!) -> Void) -> AFHTTPRequestOperation! {
         return self.GET("search", parameters: parameters, success: success, failure: failure)
+    }
+    
+    func updateTerm(term: String) {
+        parameters.updateValue(term, forKey: "term")
+    }
+    
+    func updateLocation(location: String) {
+        if(location == "current_location") {
+            
+        }
+        parameters.updateValue(location, forKey: "location")
+    }
+    
+    func updateSort(sort: Int) {
+        parameters.updateValue(sort, forKey: "sort")
+    }
+    
+    func updateCategoryFilter(category_filter: String) {
+        parameters.updateValue(category_filter, forKey: "category_filter")
+    }
+    
+    func updateRadiusFilter(radius_filter: Double) {
+        parameters.updateValue(radius_filter, forKey: "radius_filter")
+    }
+    
+    func updateDealsFilter(deals_filter: Bool) {
+        parameters.updateValue(deals_filter, forKey: "deals_filter")
     }
 }
 

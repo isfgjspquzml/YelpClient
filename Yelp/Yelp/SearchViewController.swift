@@ -8,12 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet var searchResultTableView: UITableView!
     
     var client: YelpClient!
     var searchDict: NSArray?
+    lazy var fileNotFound = UIImage(named: "filenotfound.png")
     
     // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
     let yelpConsumerKey = "vxKwwcR_NMQ7WaEiQBK_CA"
@@ -33,13 +34,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
-        client.searchWithTerm("Thai", success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+        client.updateTerm("Thai")
+        client.updateLocation("San Francisco")
+        client.search({(operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             var errorValue: NSError? = nil
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
             self.searchDict = dictionary["businesses"] as NSArray!
-        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-            println(error)
-        }
+            self.searchResultTableView.reloadData()
+            }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                println(error)
+        })
     }
     
     // From https://gist.github.com/itismadhan/6e15b0edf96bb52882c7 - modified
@@ -83,9 +87,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
-
+        let businessDict = self.searchDict![indexPath.row] as NSDictionary
+        println(businessDict)
         
-        return UITableViewCell()
+        cell.numberLabel.text = String(indexPath.row) + "."
+        cell.nameLabel.text = businessDict["name"] as String!
+        var location = businessDict["location"] as NSDictionary!
+        var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
+        var address = location["address"]![0]! as String
+        cell.locationLabel.text = address + ", " + area
+        
+        let thumbnailURL = NSURL.URLWithString(businessDict["image_url"] as String)
+        let thumbnailURLRequest = NSURLRequest(URL: thumbnailURL)
+        let thumbnailRequest = AFHTTPRequestOperation(request: thumbnailURLRequest)
+        thumbnailRequest.responseSerializer = AFImageResponseSerializer()
+        thumbnailRequest.setCompletionBlockWithSuccess(
+            {(operation: AFHTTPRequestOperation!, obj) in
+                cell.thumbnailImageView.image = obj as? UIImage
+                UIView.animateWithDuration(1, animations: {
+                    cell.thumbnailImageView.alpha = 1
+                })
+            },
+            failure: {(operation: AFHTTPRequestOperation!, obj) in
+                cell.thumbnailImageView.image = self.fileNotFound
+        })
+        thumbnailRequest.start()
+        
+        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
+        
+        
+        return cell
     }
     
     
