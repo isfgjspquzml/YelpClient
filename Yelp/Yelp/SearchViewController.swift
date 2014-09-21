@@ -131,12 +131,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         cell.numberLabel.text = String(indexPath.row + 1) + "."
         cell.nameLabel.text = businessDict["name"] as String!
-//        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
-//        
-//        var location = businessDict["location"] as NSDictionary!
-//        var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
-//        var address = location["address"]![0]! as String
-//        cell.locationLabel.text = address + ", " + area
+        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int) + " Reviews"
+
+        var location = businessDict["location"] as NSDictionary!
+        var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
+        var address = location["address"]![0]! as String
+        cell.locationLabel.text = address + ", " + area
         
         let thumbnailURL = NSURL.URLWithString(businessDict["image_url"] as String)
         let thumbnailURLRequest = NSURLRequest(URL: thumbnailURL)
@@ -167,18 +167,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
 //            cell.distanceLabel.text = "N/A"
 //        }
         
-//        let catagories = businessDict["categories"] as NSArray?
-//        var allTags: String = ""
-//        if catagories?.count > 0 {
-//            allTags += (catagories![0] as NSArray)[0] as String
-//            if catagories!.count > 1 {
-//                for i in 1...(catagories!.count - 1) {
-//                    allTags += ", "
-//                    allTags += (catagories![i] as NSArray)[0] as String
-//                }
-//            }
-//        }
-//        cell.tagsLabel.text = allTags
+        let catagories = businessDict["categories"] as NSArray?
+        var allTags: String = ""
+        if catagories?.count > 0 {
+            allTags += (catagories![0] as NSArray)[0] as String
+            if catagories!.count > 1 {
+                for i in 1...(catagories!.count - 1) {
+                    allTags += ", "
+                    allTags += (catagories![i] as NSArray)[0] as String
+                }
+            }
+        }
+        cell.tagsLabel.text = allTags
         
         return cell
     }
