@@ -130,7 +130,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         let businessDict = self.searchDict![indexPath.row] as NSDictionary
         
         cell.numberLabel.text = String(indexPath.row + 1) + "."
-//        cell.nameLabel.text = businessDict["name"] as String!
+        cell.nameLabel.text = businessDict["name"] as String!
 //        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
 //        
 //        var location = businessDict["location"] as NSDictionary!
@@ -154,11 +154,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         })
         thumbnailRequest.start()
         
-//        let averageReviewURL = NSURL.URLWithString(businessDict["rating_img_url_large"] as String)
-//        var err: NSError?
-//        var imageData :NSData = NSData.dataWithContentsOfURL(averageReviewURL,options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)
-//        cell.averageReviewImageView.image = UIImage(data: imageData)
-//    
+        let averageReviewURL = NSURL.URLWithString(businessDict["rating_img_url_large"] as String)
+        var err: NSError?
+        var imageData :NSData = NSData.dataWithContentsOfURL(averageReviewURL,options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)
+        cell.averageReviewImageView.image = UIImage(data: imageData)
+    
 //        if businessDict["distance"] != nil {
 //            let metersInAMile = 1609.34
 //            let distanceInMeters = businessDict["distance"]!.doubleValue
@@ -166,7 +166,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
 //        } else {
 //            cell.distanceLabel.text = "N/A"
 //        }
-//        
+        
 //        let catagories = businessDict["categories"] as NSArray?
 //        var allTags: String = ""
 //        if catagories?.count > 0 {
