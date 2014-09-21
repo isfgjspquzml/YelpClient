@@ -4,22 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-Yelp-AFNetworking.xcscheme</key>
+		<key>Pods-AFNetworking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Yelp-BDBOAuth1Manager.xcscheme</key>
+		<key>Pods-BDBOAuth1Manager.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Yelp-SVProgressHUD.xcscheme</key>
+		<key>Pods-SVProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Yelp.xcscheme</key>
+		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1FCFBFBFAE29417B96629D91</key>
+		<key>016078B612024D9EA7035197</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7725568BD7444DC3BE6D7859</key>
+		<key>8413CB7544FC4741AD5605B5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9744F448B3C241BF8EC8D2DA</key>
+		<key>C9D824AFE3D141DD99DCB7FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E6F770BC4E364525A32109DD</key>
+		<key>CF866D15F99D41EB841CB03A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
