@@ -46,7 +46,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         client.updateTerm("food")
-//        client.updateLocation("San Francisco")
         client.updateLl("37.7833,-122.4167")
         
         doSearch()
