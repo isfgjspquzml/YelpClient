@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import Darwin
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
@@ -44,8 +45,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
-        client.updateTerm("Thai")
-        client.updateLocation("San Francisco")
+        client.updateTerm("food")
+//        client.updateLocation("San Francisco")
+        client.updateLl("37.7833,-122.4167")
         
         doSearch()
     }
@@ -65,10 +67,23 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         var latValue = locationManager.location.coordinate.latitude
         var lonValue = locationManager.location.coordinate.longitude
-//        client.updateLocation(<#location: String#>)
+        client.updateLl(NSString(format: "%.3f", latValue) + "," + NSString(format: "%.3f", lonValue))
     }
     
-    // From https://gist.github.com/itismadhan/6e15b0edf96bb52882c7 - modified
+    func getDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
+        let R:Double = 6371 // km
+        let toRadians = 3.1415926535/180
+        let φ1 = lat1 * toRadians
+        var φ2 = lat2 * toRadians
+        var Δφ = (lat2-lat1) * toRadians
+        var Δλ = (lon2-lon1) * toRadians
+        var a = sin(Δφ/2) * sin(Δφ/2) +
+            cos(φ1) * cos(φ2) *
+            sin(Δλ/2) * sin(Δλ/2);
+        var c = 2 * atan2(sqrt(a), sqrt(1-a));
+        return R * c
+    }
+    
     func JSONParseDict(jsonObj: AnyObject) -> Dictionary<String, AnyObject> {
         var e: NSError?
         var jsonString: NSString
@@ -110,9 +125,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
         let businessDict = self.searchDict![indexPath.row] as NSDictionary
+        println(businessDict)
         
-        cell.numberLabel.text = String(indexPath.row) + "."
+        cell.numberLabel.text = String(indexPath.row + 1) + "."
         cell.nameLabel.text = businessDict["name"] as String!
+        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
+        
         var location = businessDict["location"] as NSDictionary!
         var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String)
         var address = location["address"]![0]! as String
@@ -134,7 +152,29 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         })
         thumbnailRequest.start()
         
-        cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int)
+        let averageReviewURL = NSURL.URLWithString(businessDict["rating_img_url_large"] as String)
+        var err: NSError?
+        var imageData :NSData = NSData.dataWithContentsOfURL(averageReviewURL,options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)
+        cell.averageReviewImageView.image = UIImage(data: imageData)
+    
+        if businessDict["distance"] != nil {
+            let metersInAMile = 1609.34
+            let distanceInMeters = businessDict["distance"]!.doubleValue
+            cell.distanceLabel.text = NSString(format: "%0.1f", distanceInMeters/metersInAMile)
+        } else {
+            cell.distanceLabel.text = "N/A"
+        }
+        
+        let catagories = businessDict["categories"] as NSArray?
+        var allTags: String = ""
+        if catagories?.count > 0 {
+            allTags += (catagories![0] as NSArray)[0] as String
+            for i in 1...(catagories!.count - 1) {
+                allTags += ", "
+                allTags += (catagories![i] as NSArray)[0] as String
+            }
+        }
+        cell.tagsLabel.text = allTags
         
         return cell
     }

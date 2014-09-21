@@ -16,7 +16,6 @@ class SearchResultCell: UITableViewCell {
     @IBOutlet weak var averageReviewImageView: UIImageView!
     @IBOutlet weak var numberReviewsLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var costLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var tagsLabel: UILabel!
     

@@ -66,12 +66,6 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Cost" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMR-Bs-7u1">
-                                                    <rect key="frame" x="556" y="31" width="36" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Distance" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8OW-k4-ic4">
                                                     <rect key="frame" x="539" y="7" width="53" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -91,13 +85,11 @@
                                                 <constraint firstItem="8OW-k4-ic4" firstAttribute="top" secondItem="PHh-Yp-hkn" secondAttribute="top" id="fC6-lZ-bSM"/>
                                                 <constraint firstItem="jlB-Qd-7lG" firstAttribute="leading" secondItem="Ft8-dz-B7P" secondAttribute="leading" id="nGN-Z3-Evk"/>
                                                 <constraint firstItem="PHh-Yp-hkn" firstAttribute="top" secondItem="fqB-GR-gp1" secondAttribute="topMargin" constant="3" id="sjm-Wr-wXe"/>
-                                                <constraint firstItem="hxr-1L-aOZ" firstAttribute="centerX" secondItem="GMR-Bs-7u1" secondAttribute="centerX" id="vXz-4D-AQY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="NumberLabel" destination="odF-6c-hBu" id="6Xc-Hr-loO"/>
                                             <outlet property="averageReviewImageView" destination="Ft8-dz-B7P" id="e4M-ID-8pT"/>
-                                            <outlet property="costLabel" destination="GMR-Bs-7u1" id="ysk-Y1-ABu"/>
                                             <outlet property="distanceLabel" destination="8OW-k4-ic4" id="aQg-fU-Vmb"/>
                                             <outlet property="locationLabel" destination="jlB-Qd-7lG" id="NKW-z0-iXo"/>
                                             <outlet property="nameLabel" destination="5Wr-0U-383" id="TYp-oI-KkO"/>
