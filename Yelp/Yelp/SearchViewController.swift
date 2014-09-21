@@ -34,11 +34,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-        
+
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        SVProgressHUD.show()
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
@@ -58,8 +61,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             self.searchDict = dictionary["businesses"] as NSArray!
             self.offSet += self.searchDict!.count
             self.searchResultTableView.reloadData()
+            SVProgressHUD.dismiss()
             }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
+                SVProgressHUD.dismiss()
         })
     }
     
@@ -151,7 +156,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         var location = businessDict["location"] as NSDictionary!
         var area = (location["neighborhoods"]?[0]? as? NSString ?? location["city"]! as String);
-        println("158")
         var address: NSString = "Unknown"
         
         if location["address"]!.count > 0 {

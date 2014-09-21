@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        SVProgressHUD.setBackgroundColor(UIColor(red: 0, green: 0.81, blue: 1, alpha: 1))
+        SVProgressHUD.setForegroundColor(UIColor.whiteColor())
         return true
     }
 
