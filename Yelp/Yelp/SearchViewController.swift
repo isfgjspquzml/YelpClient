@@ -169,9 +169,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         var allTags: String = ""
         if catagories?.count > 0 {
             allTags += (catagories![0] as NSArray)[0] as String
-            for i in 1...(catagories!.count - 1) {
-                allTags += ", "
-                allTags += (catagories![i] as NSArray)[0] as String
+            if catagories!.count > 1 {
+                for i in 1...(catagories!.count - 1) {
+                    allTags += ", "
+                    allTags += (catagories![i] as NSArray)[0] as String
+                }
             }
         }
         cell.tagsLabel.text = allTags
