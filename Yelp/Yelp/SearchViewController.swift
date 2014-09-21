@@ -129,8 +129,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
         let businessDict = self.searchDict![indexPath.row] as NSDictionary
         
-        cell.numberLabel.text = String(indexPath.row + 1) + "."
-        cell.nameLabel.text = businessDict["name"] as String!
+        cell.nameLabel.text = String(indexPath.row + 1) + ". " + (businessDict["name"] as String!)
         cell.numberReviewsLabel.text = String(businessDict["review_count"] as Int) + " Reviews"
 
         var location = businessDict["location"] as NSDictionary!

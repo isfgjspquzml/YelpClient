@@ -11,7 +11,6 @@ import UIKit
 class SearchResultCell: UITableViewCell {
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
-    @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var averageReviewImageView: UIImageView!
     @IBOutlet weak var numberReviewsLabel: UILabel!
