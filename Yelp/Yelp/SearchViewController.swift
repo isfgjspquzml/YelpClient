@@ -145,7 +145,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         println(size.height)
         
-        return size.height
+        return 120
     }
     
     func configureCell(cell: SearchResultCell, forRowAtIndexPath indexPath: NSIndexPath) {
