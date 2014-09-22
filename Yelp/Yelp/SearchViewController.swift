@@ -19,6 +19,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var client: YelpClient!
     var prototypeCell: SearchResultCell?
     var searchDict: NSArray?
+    var viewLoaded = false
+    var currentlyLoading = false
     var offSet: Int = 0
     
     lazy var fileNotFound = UIImage(named: "filenotfound.png")
@@ -56,15 +58,24 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         client.updateLl("37.7833,-122.4167")
         
         doSearch()
+        viewLoaded = true
     }
     
     func doSearch() {
         client.search({(operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
-            self.searchDict = dictionary["businesses"] as NSArray!
-            self.offSet += self.searchDict!.count
+            let newResults = dictionary["businesses"] as NSArray!
+            
+            if self.searchDict != nil {
+                self.searchDict = self.searchDict!.arrayByAddingObjectsFromArray(newResults)
+            } else {
+                self.searchDict = newResults
+            }
+            
+            self.offSet += newResults.count
             self.searchResultTableView.reloadData()
             SVProgressHUD.dismiss()
+            self.currentlyLoading = false
             }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
                 SVProgressHUD.dismiss()
@@ -132,8 +143,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell
         configureCell(cell, forRowAtIndexPath: indexPath)
-        
-        
         return cell
     }
     
@@ -193,6 +202,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         cell.tagsLabel.text = allTags
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if(viewLoaded && !currentlyLoading) {
+            let position = scrollView.contentOffset.y
+            let contentHeight = scrollView.contentSize.height - 700 // Arbitrary refresh distance
+            if (position >= contentHeight) {
+                client.updateOffset(offSet)
+                doSearch()
+                currentlyLoading = true
+            }
+        }
     }
 }
 
