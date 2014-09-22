@@ -3,7 +3,7 @@
 //  Yelp
 //
 //  Created by Tianyu Shi on 9/21/14.
-//  Copyright (c) 2014 Timothy Lee. All rights reserved.
+//  Copyright (c) 2014 Tianyu Shi. All rights reserved.
 //
 
 import UIKit

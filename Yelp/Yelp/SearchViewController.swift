@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import Darwin
 
-class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
+class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate {
     
     @IBOutlet var searchResultTableView: UITableView!
 
@@ -19,6 +19,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var client: YelpClient!
     var prototypeCell: SearchResultCell?
     var searchDict: NSArray?
+    var filterButton: UIBarButtonItem?
+    var searchBar: UISearchBar?
     var viewLoaded = false
     var currentlyLoading = false
     var offSet: Int = 0
@@ -36,11 +38,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-
+        if (!viewLoaded) {
+            searchResultTableView.separatorColor = UIColor.whiteColor()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        filterButton = UIBarButtonItem(title: " Filters  ", style: UIBarButtonItemStyle.Bordered, target: self, action: "segueToFilter:")
+        searchBar = UISearchBar()
+        self.navigationItem.leftBarButtonItem = filterButton
+        self.navigationItem.titleView = searchBar
         
         SVProgressHUD.show()
         
@@ -59,6 +68,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         doSearch()
         viewLoaded = true
+    }
+    
+    func segueToFilter (sender: UIButton) {
+        println("asdfasdf")
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        println(searchBar.text)
     }
     
     func doSearch() {
@@ -202,6 +219,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         cell.tagsLabel.text = allTags
+        
+        // Color
+        cell.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.05)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
