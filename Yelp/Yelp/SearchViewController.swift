@@ -47,6 +47,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         
+        searchResultTableView.estimatedRowHeight = 91
+        searchResultTableView.rowHeight = UITableViewAutomaticDimension
+        
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         client.updateTerm("food")
@@ -132,20 +135,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         return cell
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if (prototypeCell == nil) {
-            prototypeCell = (searchResultTableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.SearchResultCell") as SearchResultCell)
-        }
-        
-        configureCell(prototypeCell!, forRowAtIndexPath: indexPath)
-        prototypeCell!.layoutIfNeeded()
-        var size = prototypeCell!.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
-        
-        println(size.height)
-        
-        return 120
     }
     
     func configureCell(cell: SearchResultCell, forRowAtIndexPath indexPath: NSIndexPath) {
