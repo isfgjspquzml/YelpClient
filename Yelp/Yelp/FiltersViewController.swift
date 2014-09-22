@@ -8,14 +8,44 @@
 
 import UIKit
 
-class FiltersViewController: UIViewController {
+class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet var filterTableView: UITableView!
+    
     var client: YelpClient?
     var tempDictionary: NSDictionary?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        filterTableView.estimatedRowHeight = 80
+        filterTableView.rowHeight = UITableViewAutomaticDimension
     }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 4
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 1: // Distance
+            return 1
+        case 2: // SortBy
+            return 1
+        case 3: // Deals
+            return 1
+        case 4: // Catagories
+            return 1
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        return cell
+    }
+        
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
