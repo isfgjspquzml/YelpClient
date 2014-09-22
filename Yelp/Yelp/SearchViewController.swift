@@ -48,6 +48,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         filterButton = UIBarButtonItem(title: " Filters  ", style: UIBarButtonItemStyle.Bordered, target: self, action: "segueToFilter:")
         searchBar = UISearchBar()
+        searchBar!.delegate = self
         self.navigationItem.leftBarButtonItem = filterButton
         self.navigationItem.titleView = searchBar
         
@@ -71,11 +72,22 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func segueToFilter (sender: UIButton) {
-        println("asdfasdf")
+        let filterView = FiltersViewController(nibName: "FiltersViewController", bundle: nil)
+        filterView.client = self.client
+        self.navigationController?.pushViewController(filterView, animated: true)
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        println(searchBar.text)
+        client.updateTerm(searchBar.text)
+        client.updateOffset(0)
+        offSet = 0;
+        doSearch()
+        searchBar.resignFirstResponder()
+        println(client.parameters)
+    }
+    
+    @IBAction func onViewTap(sender: UITapGestureRecognizer) {
+        searchBar?.resignFirstResponder()
     }
     
     func doSearch() {
@@ -83,7 +95,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
             let newResults = dictionary["businesses"] as NSArray!
             
-            if self.searchDict != nil {
+            if self.searchDict != nil && self.offSet != 0 {
                 self.searchDict = self.searchDict!.arrayByAddingObjectsFromArray(newResults)
             } else {
                 self.searchDict = newResults
@@ -178,21 +190,25 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         cell.locationLabel.text = address + ", " + area
         
-        let thumbnailURL = NSURL.URLWithString(businessDict["image_url"] as String)
-        let thumbnailURLRequest = NSURLRequest(URL: thumbnailURL)
-        let thumbnailRequest = AFHTTPRequestOperation(request: thumbnailURLRequest)
-        thumbnailRequest.responseSerializer = AFImageResponseSerializer()
-        thumbnailRequest.setCompletionBlockWithSuccess(
-            {(operation: AFHTTPRequestOperation!, obj) in
-                cell.thumbnailImageView.image = obj as? UIImage
-                UIView.animateWithDuration(1, animations: {
-                    cell.thumbnailImageView.alpha = 1
-                })
-            },
-            failure: {(operation: AFHTTPRequestOperation!, obj) in
-                cell.thumbnailImageView.image = self.fileNotFound
-        })
-        thumbnailRequest.start()
+        if(businessDict["image_url"] != nil) {
+            let thumbnailURL = NSURL.URLWithString(businessDict["image_url"] as String)
+            let thumbnailURLRequest = NSURLRequest(URL: thumbnailURL)
+            let thumbnailRequest = AFHTTPRequestOperation(request: thumbnailURLRequest)
+            thumbnailRequest.responseSerializer = AFImageResponseSerializer()
+            thumbnailRequest.setCompletionBlockWithSuccess(
+                {(operation: AFHTTPRequestOperation!, obj) in
+                    cell.thumbnailImageView.image = obj as? UIImage
+                    UIView.animateWithDuration(1, animations: {
+                        cell.thumbnailImageView.alpha = 1
+                    })
+                },
+                failure: {(operation: AFHTTPRequestOperation!, obj) in
+                    cell.thumbnailImageView.image = self.fileNotFound
+            })
+            thumbnailRequest.start()
+        } else {
+            cell.thumbnailImageView.image = fileNotFound
+        }
         
         let averageReviewURL = NSURL.URLWithString(businessDict["rating_img_url_large"] as String)
         var err: NSError?

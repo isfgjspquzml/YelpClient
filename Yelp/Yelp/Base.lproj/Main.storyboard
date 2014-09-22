@@ -114,6 +114,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="height" secondItem="SVT-Pr-Wd7" secondAttribute="height" id="4MH-0a-BQB"/>
                             <constraint firstAttribute="centerY" secondItem="SVT-Pr-Wd7" secondAttribute="centerY" id="6ip-x1-y84"/>
@@ -121,6 +122,9 @@
                             <constraint firstAttribute="trailing" secondItem="SVT-Pr-Wd7" secondAttribute="trailing" id="kYF-EG-I1R"/>
                             <constraint firstItem="SVT-Pr-Wd7" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="owo-Vv-W0s"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="UbW-5m-gM4" appends="YES" id="7EQ-Pr-rs1"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="aXq-5e-odt"/>
                     <connections>
@@ -128,26 +132,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="UbW-5m-gM4">
+                    <connections>
+                        <action selector="onViewTap:" destination="vXZ-lx-hvc" id="dYP-Lp-kxU"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1040" y="120"/>
-        </scene>
-        <!--Filters View Controller-->
-        <scene sceneID="sQj-jp-lBp">
-            <objects>
-                <viewController id="UKa-XX-vxt" customClass="FiltersViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="N4x-Qh-dY5"/>
-                        <viewControllerLayoutGuide type="bottom" id="2F1-hJ-rMb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="sQk-TP-laL">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="n4a-md-4fc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1655" y="120"/>
         </scene>
         <!--Nav View Controller-->
         <scene sceneID="nkN-11-Pap">
