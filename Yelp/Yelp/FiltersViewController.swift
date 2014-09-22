@@ -11,7 +11,7 @@ import UIKit
 class FiltersViewController: UIViewController {
 
     var client: YelpClient?
-    var tempDictionary: Dictionary<String, AnyObject>?
+    var tempDictionary: NSDictionary?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -19,7 +19,7 @@ class FiltersViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        tempDictionary = Dictionary<String, AnyObject>()
+        tempDictionary = NSDictionary()
     }
     
     override func viewDidLoad() {
@@ -31,8 +31,12 @@ class FiltersViewController: UIViewController {
     }
     
     func search(sender: UIBarButtonItem) {
-        println("hi")
+        if(tempDictionary?.count > 0) {
+            for (key, value) in tempDictionary! {
+                client!.updateValueForKey(value, key: key as String)
+            }
+            client!.valueChanged = true
+        }
         self.navigationController?.popViewControllerAnimated(true)
-        client!.updateRadiusFilter(45)
     }
 }

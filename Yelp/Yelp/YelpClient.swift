@@ -11,6 +11,7 @@ import UIKit
 class YelpClient: BDBOAuth1RequestOperationManager {
     var accessToken: String!
     var accessSecret: String!
+    var valueChanged = false
     var parameters = Dictionary<String, AnyObject>()
     
     required init(coder aDecoder: NSCoder) {
@@ -61,6 +62,14 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     
     func updateLl(ll: String) {
         parameters.updateValue(ll, forKey: "ll")
+    }
+    
+    func updateValueForKey(value: AnyObject, key: String) {
+        parameters.updateValue(value, forKey: key)
+    }
+    
+    func valueChanged(changed: Bool) {
+        valueChanged = changed
     }
 }
 

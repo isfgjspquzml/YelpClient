@@ -38,8 +38,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(animated: Bool) {
-        if (!viewLoaded) {
-            searchResultTableView.separatorColor = UIColor.whiteColor()
+        if(client.valueChanged) {
+            doSearch()
+            client.valueChanged(false)
         }
     }
     
