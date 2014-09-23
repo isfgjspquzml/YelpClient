@@ -26,6 +26,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var offSet: Int = 0
     var increasingBlue = true
     var greenValue: CGFloat = 0.0
+    var refreshControl: UIRefreshControl?
     
     lazy var fileNotFound = UIImage(named: "filenotfound.png")
     
@@ -44,12 +45,20 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             doSearch()
             client.valueChanged(false)
         }
-        
-//        searchResultTableView.backgroundColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 1)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(!viewLoaded) {
+            searchResultTableView.separatorStyle = .None
+        }
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.backgroundColor = UIColor.lightGrayColor()
+        refreshControl?.tintColor = UIColor.whiteColor()
+        refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        searchResultTableView.addSubview(refreshControl!)
         
         filterButton = UIBarButtonItem(title: " Filters  ", style: UIBarButtonItemStyle.Bordered, target: self, action: "segueToFilter:")
         searchBar = UISearchBar()
@@ -74,6 +83,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         doSearch()
         viewLoaded = true
+    }
+    
+    func refresh(sender:AnyObject)
+    {
+        doSearch()
+        
+        if(refreshControl != nil) {
+            let dateFormater = NSDateFormatter()
+            dateFormater.setLocalizedDateFormatFromTemplate("MMM d, h:mm a")
+            let title = "Updated " + dateFormater.stringFromDate(NSDate())
+            let attrDict = NSDictionary(object: UIColor.whiteColor(), forKey: NSForegroundColorAttributeName)
+            let attrString = NSAttributedString(string: title, attributes: attrDict)
+            refreshControl!.attributedTitle = attrString
+            refreshControl?.endRefreshing()
+        }
     }
     
     func segueToFilter (sender: UIButton) {
@@ -106,10 +130,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 self.searchDict = newResults
             }
             
-            self.offSet += newResults.count
             self.searchResultTableView.reloadData()
             SVProgressHUD.dismiss()
             self.currentlyLoading = false
+            self.searchResultTableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
             }, {(operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
                 SVProgressHUD.dismiss()
@@ -244,12 +268,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         // Color
 //        cell.backgroundColor = UIColor(red: CGFloat((1+drand48())/1.5), green: CGFloat((1+drand48())/1.5), blue: CGFloat((1+drand48())/1.5), alpha: 0.5)
         
-        cell.backgroundColor = UIColor(red: 0, green: CGFloat(greenValue), blue: 1, alpha: 0.2)
+        cell.backgroundColor = UIColor(red: 0, green: CGFloat(greenValue), blue: 1, alpha: 0.1)
         
         if(increasingBlue) {
-            greenValue += 0.1
+            greenValue += 0.2
         } else {
-            greenValue -= 0.1
+            greenValue -= 0.2
         }
         
         if(greenValue <= 0) {
@@ -265,6 +289,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             let contentHeight = scrollView.contentSize.height - 700 // Arbitrary refresh distance
             if (position >= contentHeight) {
                 SVProgressHUD.show()
+                if(searchDict?.count > 0) {
+                    offSet += searchDict!.count
+                }
                 client.updateOffset(offSet)
                 doSearch()
                 currentlyLoading = true
