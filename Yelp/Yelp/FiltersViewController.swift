@@ -28,12 +28,6 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        filterTableView.estimatedRowHeight = 80
-        filterTableView.rowHeight = UITableViewAutomaticDimension
-        
-        tempDictionary = Dictionary<String, AnyObject>()
-        tempCatagoriesDict = Dictionary<String, AnyObject>()
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -79,19 +73,23 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section {
         case 0: // Distance
             if(indexPath.row == 0) {
                 expanded[0] = true
                 filterTableView.reloadData()
             } else {
-//                tempDictionary
+                tempDictionary!.updateValue((distArray[indexPath.row - 1] as Int * 1609) as Int, forKey: "radius_filter")
+                expanded[0] = false
+                filterTableView.reloadData()
             }
         case 1: // SortBy
             if(indexPath.row == 0) {
                 expanded[1] = true
                 filterTableView.reloadData()
+            } else {
+                tempDictionary!.updateValue(indexPath.row - 1, forKey: "sort")
             }
         case 3: // Catagories
             if(indexPath.row == 3 && !expanded[3]) {
@@ -159,6 +157,11 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     func updateDict(sender: UISwitch) {
         let row = sender.tag % 10
         let section = (sender.tag - row)/10
+        
+        if (section == 2) {
+            tempDictionary!.updateValue(sender.on, forKey: "deals_filter")
+        }
+        
         println(row)
         println(section)
     }
@@ -169,6 +172,12 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        filterTableView.estimatedRowHeight = 80
+        filterTableView.rowHeight = UITableViewAutomaticDimension
+        
+        tempDictionary = Dictionary<String, AnyObject>()
+        tempCatagoriesDict = Dictionary<String, AnyObject>()
         
         self.navigationController?.title = "Filters"
         let searchButton = UIBarButtonItem(title: "Search!", style: UIBarButtonItemStyle.Bordered, target: self, action: "search:")
