@@ -162,6 +162,10 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             tempDictionary!.updateValue(sender.on, forKey: "deals_filter")
         }
         
+        if (section == 3) {
+            tempCatagoriesDict!.updateValue(sender.on, forKey: catagoryArrayAllValue[row] as NSString)
+        }
+        
         println(row)
         println(section)
     }
@@ -189,6 +193,20 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             for (key, value) in tempDictionary! {
                 client!.updateValueForKey(value, key: key as String)
             }
+            
+            var catagories = ""
+            var first = true
+            
+            for (key, value) in tempCatagoriesDict! {
+                if(value as Bool) {
+                    if(!first) {
+                        catagories += ","
+                    }
+                    catagories += "key"
+                    first = false
+                }
+            }
+            
             client!.valueChanged = true
         }
         self.navigationController?.popViewControllerAnimated(true)
