@@ -23,6 +23,8 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     var catagoryArrayAll: NSArray = ["Active Life", "Arts & Entertainment", "Hotels & Travel", "Local Flavor", "Nightlife"]
     var catagoryArrayAllValue: NSArray = ["active", "arts", "hotelstravel", "localflavor", "nightlife"]
     
+    // THIS CODE IS EMBARASSINGLY UGLY :( BUT IT'S DUE AT 10 PM SO....
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -73,17 +75,25 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var toggleSwitch: UISwitch = UISwitch()
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
         cell.textLabel!.textColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 1)
-        if(indexPath.row == 0) {
-            cell.textLabel!.font = UIFont(name: "Avenir Next", size: 12)
+       
+        if(indexPath.section == 0 || indexPath.section == 1) {
+            if(indexPath.row == 0) {
+                cell.textLabel!.font = UIFont(name: "Avenir Next", size: 12)
+            } else {
+                cell.textLabel!.font = UIFont(name: "Avenir Next", size: 11)
+            }
+            cell.textLabel!.textAlignment = NSTextAlignment.Right
         } else {
-            cell.textLabel!.font = UIFont(name: "Avenir Next", size: 11)
+            cell.textLabel!.font = UIFont(name: "Avenir Next", size: 12)
+            cell.textLabel!.textAlignment = NSTextAlignment.Left
+            toggleSwitch = UISwitch(frame: CGRect(x: 265, y: 6, width: 0, height: 0))
+            toggleSwitch.addTarget(self, action: "updateDict:", forControlEvents: UIControlEvents.ValueChanged)
+            cell.addSubview(toggleSwitch)
         }
-        
-        cell.textLabel!.textAlignment = NSTextAlignment.Right
         
         switch indexPath.section {
         case 0:
@@ -92,41 +102,34 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 cell.textLabel!.text = "Select Distance"
             }
-            
-            return cell
         case 1:
             if(expanded[indexPath.section] && indexPath.row != 0) {
                 cell.textLabel!.text = sortMethodArray[indexPath.row - 1] as NSString
             } else {
                 cell.textLabel!.text = "Select Sorting Method"
             }
-            
-            return cell;
         case 2:
-//            let switchCell = tableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.switchCell") as SwitchTableViewCell
-            
-            //            YPSwitchTableViewCell *switchCell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell" forIndexPath:indexPath];
-            //            switchCell.switchControl.onTintColor = [UIColor redColor];
-            //            switchCell.switchControl.on = self.settings.deals;
-            //            [switchCell.switchControl addTarget:self action:@selector(setDeals:) forControlEvents:UIControlEventValueChanged];
-            //            switchCell.switchLabel.text = @"Has Deal";
-            //            return switchCell;
-            return cell
+            cell.textLabel!.text = "Search For Deals"
         case 3:
-            let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+            if(expanded[indexPath.section]) {
+                cell.textLabel!.text = catagoryArrayAll[indexPath.row] as NSString
+            } else {
+                cell.textLabel!.text = catagoryArray[indexPath.row] as NSString
+            }
             
-            //            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-            //            if ([self sectionIsExpanded:indexPath.section] || indexPath.row < 3) {
-            //                cell.textLabel.text = [self.categories allKeys][indexPath.row];
-            //            } else {
-            //                cell.textLabel.text = @"More...";
-            //            }
-            return cell;
+            if(!expanded[3] && indexPath.row == 3) {
+                toggleSwitch.removeFromSuperview()
+            }
         default:
-            return cell
+            break
         }
+        
+        return cell
     }
     
+    func updateDict(sender: UISwitch) {
+        println("Asdf")
+    }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
