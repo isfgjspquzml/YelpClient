@@ -13,7 +13,7 @@ class NavViewController: UINavigationController {
     @IBOutlet var navBar: UINavigationBar!
     
     override func viewWillAppear(animated: Bool) {
-        navBar.barTintColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 1)
+        navBar.barTintColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 0.5)
         navBar.tintColor = UIColor.whiteColor()
     }
     

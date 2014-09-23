@@ -26,16 +26,31 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         return 4
     }
     
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0: // Distance
+            return "Distance"
+        case 1: // SortBy
+            return "Sorting Method"
+        case 2: // Deals
+            return "Deals"
+        case 3: // Catagories
+            return "Catagories"
+        default:
+            return ""
+        }
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 1: // Distance
+        case 0: // Distance
             return 1
-        case 2: // SortBy
+        case 1: // SortBy
             return 1
-        case 3: // Deals
+        case 2: // Deals
             return 1
-        case 4: // Catagories
-            return 1
+        case 3: // Catagories
+            return 4
         default:
             return 0
         }
@@ -43,6 +58,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        
         return cell
     }
         

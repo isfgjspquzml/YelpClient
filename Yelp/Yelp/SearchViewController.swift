@@ -24,6 +24,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var viewLoaded = false
     var currentlyLoading = false
     var offSet: Int = 0
+    var increasingBlue = true
+    var greenValue: CGFloat = 0.0
     
     lazy var fileNotFound = UIImage(named: "filenotfound.png")
     
@@ -42,6 +44,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             doSearch()
             client.valueChanged(false)
         }
+        
+//        searchResultTableView.backgroundColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 1)
     }
     
     override func viewDidLoad() {
@@ -238,7 +242,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         cell.tagsLabel.text = allTags
         
         // Color
-        cell.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.05)
+//        cell.backgroundColor = UIColor(red: CGFloat((1+drand48())/1.5), green: CGFloat((1+drand48())/1.5), blue: CGFloat((1+drand48())/1.5), alpha: 0.5)
+        
+        cell.backgroundColor = UIColor(red: 0, green: CGFloat(greenValue), blue: 1, alpha: 0.2)
+        
+        if(increasingBlue) {
+            greenValue += 0.1
+        } else {
+            greenValue -= 0.1
+        }
+        
+        if(greenValue <= 0) {
+            increasingBlue = true
+        } else if(greenValue >= 1) {
+            increasingBlue = false
+        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -246,6 +264,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             let position = scrollView.contentOffset.y
             let contentHeight = scrollView.contentSize.height - 700 // Arbitrary refresh distance
             if (position >= contentHeight) {
+                SVProgressHUD.show()
                 client.updateOffset(offSet)
                 doSearch()
                 currentlyLoading = true
