@@ -103,7 +103,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             
             return cell;
         case 2:
-            let switchCell = tableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.switchCell") as SwitchTableViewCell
+//            let switchCell = tableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.switchCell") as SwitchTableViewCell
             
             //            YPSwitchTableViewCell *switchCell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell" forIndexPath:indexPath];
             //            switchCell.switchControl.onTintColor = [UIColor redColor];
@@ -111,7 +111,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             //            [switchCell.switchControl addTarget:self action:@selector(setDeals:) forControlEvents:UIControlEventValueChanged];
             //            switchCell.switchLabel.text = @"Has Deal";
             //            return switchCell;
-            return switchCell
+            return cell
         case 3:
             let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             
