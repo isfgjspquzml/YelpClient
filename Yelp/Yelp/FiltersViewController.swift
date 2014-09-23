@@ -13,7 +13,8 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet var filterTableView: UITableView!
     
     var client: YelpClient?
-    var tempDictionary: NSDictionary?
+    var tempDictionary: Dictionary<String, AnyObject>?
+    var tempCatagoriesDict: Dictionary<String, AnyObject>?
     
     var expanded = [false, false, false, false]
     var distArray: NSArray = [1, 2, 5, 10]
@@ -30,6 +31,9 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         
         filterTableView.estimatedRowHeight = 80
         filterTableView.rowHeight = UITableViewAutomaticDimension
+        
+        tempDictionary = Dictionary<String, AnyObject>()
+        tempCatagoriesDict = Dictionary<String, AnyObject>()
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -75,6 +79,30 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.section {
+        case 0: // Distance
+            if(indexPath.row == 0) {
+                expanded[0] = true
+                filterTableView.reloadData()
+            } else {
+//                tempDictionary
+            }
+        case 1: // SortBy
+            if(indexPath.row == 0) {
+                expanded[1] = true
+                filterTableView.reloadData()
+            }
+        case 3: // Catagories
+            if(indexPath.row == 3 && !expanded[3]) {
+                expanded[3] = true
+                filterTableView.reloadData()
+            }
+        default:
+            break
+        }
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var toggleSwitch: UISwitch = UISwitch()
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
@@ -92,6 +120,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.textLabel!.textAlignment = NSTextAlignment.Left
             toggleSwitch = UISwitch(frame: CGRect(x: 265, y: 6, width: 0, height: 0))
             toggleSwitch.addTarget(self, action: "updateDict:", forControlEvents: UIControlEvents.ValueChanged)
+            toggleSwitch.tag = indexPath.section * 10 + indexPath.row
             cell.addSubview(toggleSwitch)
         }
         
@@ -128,12 +157,14 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func updateDict(sender: UISwitch) {
-        println("Asdf")
+        let row = sender.tag % 10
+        let section = (sender.tag - row)/10
+        println(row)
+        println(section)
     }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        tempDictionary = NSDictionary()
     }
     
     override func viewDidLoad() {
