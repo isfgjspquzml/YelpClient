@@ -9,7 +9,7 @@
 import UIKit
 
 class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     @IBOutlet var filterTableView: UITableView!
     
     var client: YelpClient?
@@ -29,7 +29,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         filterTableView.estimatedRowHeight = 80
         filterTableView.rowHeight = UITableViewAutomaticDimension
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 4
     }
@@ -79,53 +79,54 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.textLabel!.textColor = UIColor(red: 0, green: 0.81, blue: 1, alpha: 1)
         if(indexPath.row == 0) {
             cell.textLabel!.font = UIFont(name: "Avenir Next", size: 12)
+        } else {
+            cell.textLabel!.font = UIFont(name: "Avenir Next", size: 11)
         }
+        
+        cell.textLabel!.textAlignment = NSTextAlignment.Right
         
         switch indexPath.section {
         case 0:
             if(expanded[indexPath.section] && indexPath.row != 0) {
                 cell.textLabel!.text = String(distArray[indexPath.row - 1] as Int) + " mi"
             } else {
-                cell.textLabel!.text = "Select Distance!"
+                cell.textLabel!.text = "Select Distance"
             }
-
+            
             return cell
         case 1:
-            let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-
-//            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-//            NSString *displaySortMethod = self.settings.sortMethod;
-//            if ([self sectionIsExpanded:indexPath.section]) {
-//                displaySortMethod = [self sortMethodStringArray][indexPath.row];
-//            }
-//            cell.textLabel.text = displaySortMethod;
+            if(expanded[indexPath.section] && indexPath.row != 0) {
+                cell.textLabel!.text = sortMethodArray[indexPath.row - 1] as NSString
+            } else {
+                cell.textLabel!.text = "Select Sorting Method"
+            }
+            
             return cell;
         case 2:
-            let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-
-//            YPSwitchTableViewCell *switchCell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell" forIndexPath:indexPath];
-//            switchCell.switchControl.onTintColor = [UIColor redColor];
-//            switchCell.switchControl.on = self.settings.deals;
-//            [switchCell.switchControl addTarget:self action:@selector(setDeals:) forControlEvents:UIControlEventValueChanged];
-//            switchCell.switchLabel.text = @"Has Deal";
-//            return switchCell;
-            return cell
+            let switchCell = tableView.dequeueReusableCellWithIdentifier("com.tianyu.Yelp.switchCell") as SwitchTableViewCell
+            
+            //            YPSwitchTableViewCell *switchCell = [tableView dequeueReusableCellWithIdentifier:@"SwitchCell" forIndexPath:indexPath];
+            //            switchCell.switchControl.onTintColor = [UIColor redColor];
+            //            switchCell.switchControl.on = self.settings.deals;
+            //            [switchCell.switchControl addTarget:self action:@selector(setDeals:) forControlEvents:UIControlEventValueChanged];
+            //            switchCell.switchLabel.text = @"Has Deal";
+            //            return switchCell;
+            return switchCell
         case 3:
             let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-
-//            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-//            if ([self sectionIsExpanded:indexPath.section] || indexPath.row < 3) {
-//                cell.textLabel.text = [self.categories allKeys][indexPath.row];
-//            } else {
-//                cell.textLabel.text = @"More...";
-//            }
+            
+            //            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            //            if ([self sectionIsExpanded:indexPath.section] || indexPath.row < 3) {
+            //                cell.textLabel.text = [self.categories allKeys][indexPath.row];
+            //            } else {
+            //                cell.textLabel.text = @"More...";
+            //            }
             return cell;
         default:
-            let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             return cell
         }
     }
-        
+    
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -134,7 +135,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationController?.title = "Filters"
         let searchButton = UIBarButtonItem(title: "Search!", style: UIBarButtonItemStyle.Bordered, target: self, action: "search:")
         self.navigationItem.rightBarButtonItem = searchButton
