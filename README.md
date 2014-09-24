@@ -19,3 +19,5 @@ Features:
 - Filters page
 
 ![Alt text](/gifs/filters.gif?raw=true "Filters")
+
+There are a number of bugs in here at the moment though
