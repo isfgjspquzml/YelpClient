@@ -18,4 +18,4 @@ Features:
 
 - Filters page
 
-![Alt text](/gifs/basics.gif?raw=true "Filters")
+![Alt text](/gifs/filters.gif?raw=true "Filters")
