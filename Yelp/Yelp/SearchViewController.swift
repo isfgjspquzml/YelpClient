@@ -120,6 +120,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func doSearch() {
+        println(client.parameters)
         client.search({(operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             let dictionary: Dictionary<String, AnyObject> = self.JSONParseDict(response)
             let newResults = dictionary["businesses"] as NSArray!
@@ -130,6 +131,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 self.searchDict = newResults
             }
             
+            println(newResults)
             self.searchResultTableView.reloadData()
             SVProgressHUD.dismiss()
             self.currentlyLoading = false
