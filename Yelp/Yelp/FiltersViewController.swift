@@ -89,7 +89,9 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 expanded[1] = true
                 filterTableView.reloadData()
             } else {
+                expanded[1] = false
                 tempDictionary!.updateValue(indexPath.row - 1, forKey: "sort")
+                filterTableView.reloadData()
             }
         case 3: // Catagories
             if(indexPath.row == 3 && !expanded[3]) {
